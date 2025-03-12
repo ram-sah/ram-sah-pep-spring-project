@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -32,4 +34,17 @@ public class AccountService {
             
         return accountRepository.save(newAccount);
     }
+
+    //Login User
+    public Account loginUser(String username, String password){
+        Optional<Account> user = accountRepository.findByUsername(username);
+        if(user.isPresent() && user.get().getPassword().equals(password)){
+            return user.get();
+        }else{
+            throw new CustomException("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    
+
 }
