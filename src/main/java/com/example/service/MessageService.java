@@ -9,6 +9,9 @@ import com.example.exception.CustomException;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MessageService {
     private final MessageRepository messageRepository;
@@ -29,6 +32,39 @@ public class MessageService {
       }
       accountRepository.findById(message.getPostedBy()).orElseThrow(() -> new CustomException("User doesn't exist", HttpStatus.BAD_REQUEST));
       return messageRepository.save(message);
+    }
+
+    //Get all messages 
+    public List<Message> getAllMessages(){
+      return messageRepository.findAll();
+    }
+
+    //Get message by ID
+    public Optional<Message> getMessageById(Integer messageId){
+      return messageRepository.findById(messageId);
+    }
+
+    //Delete message byID
+    public int deleteMessageById(Integer messageId) {
+      if (!messageRepository.existsById(messageId)) {
+          return 0;
+      }
+      messageRepository.deleteById(messageId);
+      return 1;
+      }
+    
+    //Update message
+    public int updateMessage(Integer messageId, String newMessageText) {
+      Optional<Message> existingMessage = messageRepository.findById(messageId);
+
+      if (existingMessage.isPresent()) {
+          Message message = existingMessage.get();
+          message.setMessageText(newMessageText); // Update the message text
+          messageRepository.save(message); // Save the updated message
+          return 1;
+      } else {
+          return 0;
+      }
     }
 
 
