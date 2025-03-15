@@ -3,8 +3,10 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.entity.Message;
+import com.example.entity.Account;
 import com.example.exception.CustomException;
 import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
@@ -56,7 +58,6 @@ public class MessageService {
     //Update message
     public int updateMessage(Integer messageId, String newMessageText) {
       Optional<Message> existingMessage = messageRepository.findById(messageId);
-
       if (existingMessage.isPresent()) {
           Message message = existingMessage.get();
           message.setMessageText(newMessageText); // Update the message text
@@ -67,5 +68,13 @@ public class MessageService {
       }
     }
 
+    //get all message by ID
+    public List<Message> getMessagesById(Integer accountId){
+      Account account = accountRepository.findById(accountId).orElse(null);
+      if(account != null){
+        return messageRepository.findByPostedBy(account.getAccountId());
+      }
+      return List.of();
+    }
 
 }

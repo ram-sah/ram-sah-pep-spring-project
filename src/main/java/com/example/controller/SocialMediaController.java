@@ -104,10 +104,7 @@ public class SocialMediaController {
     public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, @RequestBody Map<String, String> requestBody) {
         String messageText = requestBody.get("messageText");
 
-        if (messageText == null || messageText.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
-        }
-        if (messageText.length() > 255) {
+        if (messageText == null || messageText.isEmpty() || messageText.length() > 255) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
         }
      // Attempt to update the message
@@ -120,5 +117,11 @@ public class SocialMediaController {
      }
     }
 
+    //Get messages by a particular userID
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> getAllMessageById(@PathVariable Integer accountId){
+        List<Message> message = messageService.getMessagesById(accountId);
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
     
 }

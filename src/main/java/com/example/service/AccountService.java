@@ -31,7 +31,7 @@ public class AccountService {
         Account newAccount = new Account();
         newAccount.setUsername(account.getUsername());
         newAccount.setPassword(account.getPassword());
-            
+        
         return accountRepository.save(newAccount);
     }
 
@@ -45,6 +45,9 @@ public class AccountService {
         }
     }
 
-    
+    //This method findById created for MessageService class to get 'getMessageById' method
+    public Optional<Account> findById (Integer accountId){
+        return accountRepository.findById(accountId);
+    }
 
 }
